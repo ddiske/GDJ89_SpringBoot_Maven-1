@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.root.app.board.qna.QnaDAO">
+	<select id="getList" resultType="QnaDTO">
+		SELECT * FROM QNA_TBL
+		ORDER BY BOARD_REF DESC, BOARD_STEP ASC
+	</select>
+	
+	<select id="getDetail" parameterType="QnaDTO" resultType="QnaDTO">
+		SELECT * FROM QNA_TBL
+		WHERE BOARD_NUM = #{boardNum}
+	</select>
+	
+	<insert id="add" parameterType="QnaDTO" useGeneratedKeys="true" keyProperty="boardNum">
+		INSERT INTO QNA_TBL (BOARD_NUM, BOARD_TITLE, BOARD_CONTENTS, BOARD_DATE, BOARD_HIT, USERNAME, BOARD_REF, BOARD_STEP, BOARD_DEPTH)
+		VALUES (0, #{boardTitle}, #{boardContents}, now(), 0, #{username}, 0, 0, 0)
+	</insert>
+	
+	<update id="refUpdate" parameterType="QnaDTO">
+		UPDATE QNA_TBL
+		SET BOARD_REF = #{boardRef}
+		WHERE BOARD_NUM = #{boardNum}
+	</update>
+	
+	<update id="stepUpdate" parameterType="QnaDTO">
+		UPDATE QNA_TBL
+		SET BOARD_STEP = BOARD_STEP + 1
+		WHERE BOARD_REF = #{boardRef}
+		AND BOARD_STEP > #{boardStep}
+	</update>
+	
+	<update id="stepUpdate2" parameterType="QnaDTO">
+		UPDATE QNA_TBL
+		SET BOARD_STEP = #{boardStep} + 1
+		WHERE BOARD_NUM = #{boardNum}
+	</update>
+	
+	<update id="depthUpdate" parameterType="QnaDTO">
+		UPDATE QNA_TBL
+		SET BOARD_DEPTH = #{boardDepth} + 1
+		WHERE BOARD_NUM = #{boardNum}
+	</update>
+</mapper>
